@@ -2,7 +2,8 @@ version: '3.8'
 
 services:
   postgres:
-    image: postgres:latest
+    image: postgis/postgis:15-3.3
+    container_name: poitracker-db
     ports:
       - "5432:5432"
     environment:
@@ -11,8 +12,12 @@ services:
       POSTGRES_DB: poitracker
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    command: ["postgres", "-c", "shared_preload_libraries=cube"]
-    #command: ["postgres", "-c", "shared_preload_libraries=earthdistance,cube", "-c", "extension=earthdistance"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   postgres_data:
+    name: poitracker-postgres-data
