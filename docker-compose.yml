@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: poitracker
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    command: ["postgres", "-c", "shared_preload_libraries=cube"]
+    #command: ["postgres", "-c", "shared_preload_libraries=earthdistance,cube", "-c", "extension=earthdistance"]
+
+volumes:
+  postgres_data:
